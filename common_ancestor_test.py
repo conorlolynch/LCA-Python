@@ -3,7 +3,80 @@ import unittest
 import common_ancestor
 import math
 
+# To run this test in console:
+# py -m unittest common_ancestor_test
+
+
+
 class TestCommonAncestor(unittest.TestCase):
+
+    def test_DAG(self):
+
+        """ Test creating a DAG object with no nodes"""
+        dag = common_ancestor.DAG()
+        self.assertEqual({}, dag.get_nodes())
+
+
+
+        """ Test finding LCA on DAG with no nodes """
+        self.assertEqual(-1, dag.findLCA('A','B'))
+
+
+
+        """ Test creating a DAG with one node """
+        dag.insert_node('A',None, None)
+        self.assertEqual({'A':[[],[],0]}, dag.get_nodes())
+
+
+
+        """ Test finding LCA of DAG with one node """
+        self.assertEqual('A',dag.findLCA('A','A'))
+        self.assertEqual(-1 ,dag.findLCA('A','M'))
+
+
+
+        """ Test finding LCA of DAG with two nodes """
+        dag.add_edge(['A','B'])
+        self.assertEqual('A', dag.findLCA('A','B'))
+
+
+
+        """ Test finding LCA of DAG with multiple nodes and edges """
+        edge_list = [['A','B'],['A','C'],['A','D'],['B','G'],['B','E'],['C','E'],
+                     ['C','F'],['D','F'],['E','G'],['E','H'],['F','H']]
+
+        dag = common_ancestor.DAG()
+        for edge in edge_list:
+            dag.add_edge(edge)
+
+        self.assertEqual('A', dag.findLCA('B','C'))
+        self.assertEqual('A', dag.findLCA('B','D'))
+        self.assertEqual('A', dag.findLCA('D','C'))
+        self.assertEqual('B', dag.findLCA('B','E'))
+        self.assertEqual('C', dag.findLCA('C','E'))
+        self.assertEqual('C', dag.findLCA('C','F'))
+        self.assertEqual('A', dag.findLCA('E','D'))
+        self.assertEqual('E', dag.findLCA('G','H'))
+        self.assertEqual('C', dag.findLCA('G','F'))
+        self.assertEqual('A', dag.findLCA('F','B'))
+        self.assertEqual('C', dag.findLCA('H','C'))
+
+
+
+        """ Test finding LCA of DAG with unusual graph structure """
+        edge_list = [ ['A','B'], ['B','C'], ['C','D'], ['D','E'] ]
+
+        dag = common_ancestor.DAG()
+        for edge in edge_list:
+            dag.add_edge(edge)
+
+        self.assertEqual('A', dag.findLCA('A','B'))
+        self.assertEqual('B', dag.findLCA('B','C'))
+        self.assertEqual('E', dag.findLCA('E','E'))
+
+
+
+
 
     def test_Node(self):
 
